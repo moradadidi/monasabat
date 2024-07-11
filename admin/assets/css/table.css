@@ -1,0 +1,252 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: white;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+}
+
+
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.product-img{
+    width: 100px;
+    height: 100px;
+}
+.text-xl {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.text-gray-800 {
+    color: #333;
+}
+
+.text-gray-600 {
+    color: #666;
+}
+
+.text-sm {
+    font-size: .875rem;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+button.del {
+    background: none;
+    border: none;
+    color: rgb(255, 0, 0);
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+button.edit {
+    background: none;
+    border: none;
+    color: rgb(39, 182, 39);
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+button.del:hover {
+    background-color: rgb(255, 0, 0);
+    color: white;
+    border-radius: 5px;
+}
+
+button.edit:hover {
+    background-color: rgb(39, 182, 39);
+    color: white;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    th, td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    tr {
+        display: block;
+        margin-bottom: 10px;
+    }
+    tr:nth-child(even) {
+        background-color: transparent;
+    }
+    tr::before {
+        content: '';
+        display: table;
+    }
+    tr::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+
+#stats {
+    
+    background-color: white;
+    color: #1e1e2f;
+    text-align: center;
+}
+
+#stats h3 {
+   
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e1e2f;
+}
+
+#stats p {
+    
+    font-size: 1rem;
+    color: white;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.stats-item {
+    background-color: rgba(32, 59, 232);
+    padding: 20px 40px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+    width: 200px;
+}
+
+.stats-item:hover {
+    transform: translateY(-10px);
+}
+
+.stats-item h4 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: white;
+}
+
+.stats-item p {
+    font-size: 1rem;
+    color: white;
+}
+
+#users{
+    background-color: rgb(255, 136, 0);
+}
+#products{
+    background-color: rgb(0, 255, 13);
+}
+#categories{
+    background-color: rgb(0, 204, 255);
+}
+
+/* 
+.container_upload {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid rgba(32, 59, 232, 0.3);
+    border-radius: 10px;
+}
+
+.upload_form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upload_form h1 {
+    font-size: 1.5rem;
+    color: #203be8;
+}
+
+.upload_form label {
+    font-size: 1rem;
+    color: #203be8;
+}
+
+.upload_form input, .upload_form textarea, .upload_form select {
+    padding: 10px;
+    border: 1px solid rgba(32, 59, 232, 0.3);
+    border-radius: 5px;
+}
+
+.upload_form input[type="submit"] {
+    background-color: rgba(32, 59, 232, 0.8);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.upload_form input[type="submit"]:hover {
+    background-color: rgba(32, 59, 232, 1);
+}
+
+.img-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 2px dashed rgba(32, 59, 232, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.img-area:hover {
+    background-color: rgba(32, 59, 232, 0.1);
+}
+
+.img-area .icon {
+    font-size: 2rem;
+    color: rgba(32, 59, 232, 0.8);
+}
+
+.img-area h3 {
+    font-size: 1.25rem;
+    color: #203be8;
+    margin: 10px 0;
+}
+
+.img-area p {
+    font-size: 1rem;
+    color: #666;
+}
+
+@media screen and (max-width: 768px) {
+    .container_upload {
+        padding: 15px;
+    }
+    .upload_form h1 {
+        font-size: 1.25rem;
+    }
+    .img-area {
+        padding: 15px;
+    }
+} */
