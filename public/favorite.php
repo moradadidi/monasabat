@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo '<script>
                     window.addEventListener("DOMContentLoaded", (event) => {
                         Swal.fire({
-                            icon: "warning",
+                            icon: "error",
                             title: "Deleted!",
                             text: "The product has been removed from your favorites.",
                             showConfirmButton: false,
@@ -82,6 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
+        /* .home {
+        height: 100vh;
+            background-color: #ffffff;
+            background-image: radial-gradient(at 12% 45%, #32CD32 40%, transparent 20%),
+                radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
+        } */
         .home nav {
             height: 60px; 
         }
@@ -163,13 +169,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <section class="home mt-14">
         <section class="mt-8 container mx-auto px-4">
-            <div class="header mb-8 text-center">
+            <div class="header mb-10 text-center">
                 <h4 class="font-bold text-2xl text-gray-800">Your Favorite Products</h4>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative" id="favorites-div">
                 <?php if (count($favorites) > 0): ?>
                     <?php foreach ($favorites as $product): ?>
-                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden relative group">
+                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden relative group hover:scale-105 duration-300">
                             <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" class="product-image cursor-pointer" alt="<?= htmlspecialchars($product['nom_product']) ?>" data-product-id="<?= $product['id_product'] ?>">
                             <div class="card-body p-4">
                                 <div class="card-header flex justify-between items-center mb-2">

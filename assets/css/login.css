@@ -55,7 +55,7 @@
   gap: 5px;
 }
 
-.icon {
+.input_container .icon {
   width: 20px;
   position: absolute;
   z-index: 99;
@@ -63,12 +63,13 @@
   bottom: 9px;
 }
 
-.form_containe  i {
+.input_container  i {
   position: absolute;
   z-index: 99;
   left: 12px;
   bottom: 16px;
-  font-size: 14px;
+  font-size: 17px;
+  top: 37px;
 }
 
 .input_label {

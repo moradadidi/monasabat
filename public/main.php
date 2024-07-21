@@ -29,6 +29,14 @@ if (!empty($product_name)) {
 ?>
 
 <section class="home ">
+    <!-- Cookie Consent Popup -->
+    <div id="cookie-consent" class="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 flex justify-between items-center z-50 hidden">
+        <p>We use cookies to improve your experience on our site. By using our site, you accept cookies.</p>
+        <div>
+            <button id="accept-cookies" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">Accept</button>
+            <button id="decline-cookies" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">Decline</button>
+        </div>
+    </div>
     <?php if (!empty($sel_products)): ?>
         <section class="search-results mt-8">
             <div class="container mx-auto px-4">
@@ -90,9 +98,9 @@ if (!empty($product_name)) {
                 </div>
                 <div class="relative">
                     <div class="swiper-container">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper ">
                             <?php foreach ($categories as $category): ?>
-                                <div class="swiper-slide">
+                                <div class="swiper-slide hover:scale-105 duration-300">
                                     <a href="categorie.php?cat=<?= htmlspecialchars($category['id_category']) ?>" class="block relative category-card">
                                         <img src="../admin/<?= htmlspecialchars($category['photo']) ?>" class="w-full h-56 object-cover" alt="<?= htmlspecialchars($category['name']) ?>">
                                         <div class="category-name-overlay absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center opacity-0 transition-opacity duration-300">
@@ -253,6 +261,18 @@ if (!empty($product_name)) {
                     });
                 </script>';
                 exit();
+                }else{
+                    echo '<script>
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Already in  favorites!!",
+                                text: "Product is already added to your favorites .",
+                                showConfirmButton: false,
+                                timer: 2000
+                                
+                            })                       
+                    </script>';
+                    exit();
                 }
             }
         }
@@ -262,6 +282,24 @@ if (!empty($product_name)) {
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+         const cookieConsent = document.getElementById('cookie-consent');
+            const acceptCookies = document.getElementById('accept-cookies');
+            const declineCookies = document.getElementById('decline-cookies');
+            const consentStatus = localStorage.getItem('cookieConsent');
+
+            if (!consentStatus) {
+                cookieConsent.classList.remove('hidden');
+            }
+
+            acceptCookies.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'accepted');
+                cookieConsent.classList.add('hidden');
+            });
+
+            declineCookies.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'declined');
+                cookieConsent.classList.add('hidden');
+            });
         const swiper = new Swiper('.swiper-container', {
             loop: true,
             pagination: {
@@ -397,3 +435,4 @@ document.addEventListener('DOMContentLoaded', function () {
         transform: translateX(0);
     }
 </style>
+

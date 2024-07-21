@@ -56,32 +56,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body class="bg-gray-100">
     <div class="home">
-    <section class="container max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">Add Review</h2>
-        <form action="selected_product.php?id=<?=$id_produit?>" method="post" class="space-y-6">
-            <input type="hidden" name="id_product" value="<?=$id_produit?>">
-            <div class="form-group">
-                <label for="rating" class="block text-gray-700">Rate the product -  <span class="text-red-500">*</span></label>
-                <div class="star-rating flex text-4xl justify-center mt-2">
-                    <input type="radio" name="rating" id="rating-5" value="5">
-                    <label for="rating-5" class="star">&#9733;</label>
-                    <input type="radio" name="rating" id="rating-4" value="4">
-                    <label for="rating-4" class="star">&#9733;</label>
-                    <input type="radio" name="rating" id="rating-3" value="3">
-                    <label for="rating-3" class="star">&#9733;</label>
-                    <input type="radio" name="rating" id="rating-2" value="2">
-                    <label for="rating-2" class="star">&#9733;</label>
-                    <input type="radio" name="rating" id="rating-1" value="1">
-                    <label for="rating-1" class="star">&#9733;</label>
+        <section class="container max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Add Review</h2>
+            <form action="selected_product.php?id=<?=$id_produit?>" method="post" class="space-y-6">
+                <input type="hidden" name="id_product" value="<?=$id_produit?>">
+                <div class="form-group">
+                    <label for="rating" class="block text-gray-700">Rate the product - <span class="text-red-500">*</span></label>
+                    <div class="star-rating flex text-4xl justify-center mt-2">
+                        <input type="radio" name="rating" id="rating-5" value="5" required>
+                        <label for="rating-5" class="star">&#9733;</label>
+                        <input type="radio" name="rating" id="rating-4" value="4">
+                        <label for="rating-4" class="star">&#9733;</label>
+                        <input type="radio" name="rating" id="rating-3" value="3">
+                        <label for="rating-3" class="star">&#9733;</label>
+                        <input type="radio" name="rating" id="rating-2" value="2">
+                        <label for="rating-2" class="star">&#9733;</label>
+                        <input type="radio" name="rating" id="rating-1" value="1">
+                        <label for="rating-1" class="star">&#9733;</label>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="comment" class="block text-gray-700">Comment</label>
-                <textarea name="comment" id="comment" class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows="5" placeholder="Your comment" required></textarea>
-            </div>
-            <button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-200">+ Add Review</button>
-        </form>
-    </section>
+                <div class="form-group">
+                    <label for="comment" class="block text-gray-700">Comment</label>
+                    <textarea name="comment" id="comment" class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows="5" placeholder="Your comment" required></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-200">+ Add Review</button>
+            </form>
+        </section>
     </div>
 </body>
 </html>

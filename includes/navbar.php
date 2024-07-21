@@ -12,13 +12,6 @@ if ($user_id) {
     $orders = ['n_orders' => 0, 'quantity' => 0];
 }
 
-$product_name = $_POST['name'] ?? '';
-
-// Fetch products based on search
-$productStmt = $pdo->prepare('SELECT * FROM products WHERE nom_product LIKE ?');
-$productStmt->execute(["%$product_name%"]);
-$sel_products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
-
 // Fetch categories
 $categoryStmt = $pdo->prepare("SELECT id_category, name FROM categories");
 $categoryStmt->execute();
@@ -46,7 +39,7 @@ if ($user_id) {
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="../assets/css/tailwind-output.css"> -->
+    <link rel="stylesheet" href="../assets/css/tailwind-output.css">
     <link rel="stylesheet" href="../assets/css/nav.css">
     <link rel="stylesheet" href="../assets/css/login.css">
 </head>
@@ -64,7 +57,7 @@ if ($user_id) {
                     </svg>
                 </a>
                 <!-- Dropdown menu -->
-                <div class="absolute left-0 z-10 hidden mt-2 w-66 bg-white divide-y divide-gray-100 rounded-lg shadow group-hover:block">
+                <div class="drop absolute left-0 z-10 hidden mt-2 w-66 bg-white divide-y divide-gray-100 rounded-lg shadow group-hover:block">
                     <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDividerButton">
                         <?php foreach ($categories as $category) { ?>
                             <li>
@@ -77,52 +70,68 @@ if ($user_id) {
             <a href="contact.php">Contact Us</a>
         </nav>
         <div class="icons flex items-center space-x-4 relative">
-    <div class="fas fa-bars text-gray-700 cursor-pointer" id="menu-btn"></div>
-    <div class="fa fa-heart text-gray-700 cursor-pointer group relative" id="fav-btn" title="Favorite">
-        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
-            Favorite
-        </span>
-    </div>
-    <div class="relative group" title="Cart">
-        <div class="fas fa-shopping-cart text-gray-700 cursor-pointer" id="cart-btn"></div>
-        <span class="absolute -top-4 -right-2 inline-flex items-center justify-center w-9 h-9 text-lg font-bold text-white bg-green-600 rounded-full shadow-md"><?= htmlspecialchars($orders['n_orders'], ENT_QUOTES, 'UTF-8'); ?></span>
-        <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
-            Cart
-        </span>
-    </div>
-</div>
-
+            <div class="fas fa-bars text-gray-700 cursor-pointer" id="menu-btn"></div>
+            <div class="fa fa-heart text-gray-700 cursor-pointer group relative" id="fav-btn" title="Favorite">
+                <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
+                    Favorite
+                </span>
+            </div>
+            <div class="relative group" title="Cart">
+                <div class="fas fa-shopping-cart text-gray-700 cursor-pointer" id="cart-btn"></div>
+                <?php if (htmlspecialchars($orders['n_orders'])>0):?>
+                <span class="absolute -top-4 -right-2 inline-flex items-center justify-center w-9 h-9 text-lg font-bold text-white bg-green-600 rounded-full shadow-md"><?= htmlspecialchars($orders['n_orders'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php endif; ?>
+                <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
+                    Cart
+                </span>
+            </div>
+        </div>
         <form action="" class="search-form" method="post">
             <input type="search" name="name" id="search-box" placeholder="Search here...">
             <button type="submit" name="search" class="fas fa-search text-3xl mx-6"></button>
         </form>
-
-        <div class="relative group">
-            <div class="profil-btn cursor-pointer bg-white rounded-full border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
-                <a href="../public/profil.php"><img src="../public/pictures/<?=$userProfile["photo"]?>" class="rounded-full" alt="Profile"></a>
-            </div>
-            <div class="absolute top-full -left-32 mb-2 hidden w-max px-3 py-2 text-xl text-white bg-orange-500 rounded-md shadow-md group-hover:block">
-                <div>
-                    <span class="font-bold">Name:</span> <?= htmlspecialchars($userProfile['username'], ENT_QUOTES, 'UTF-8') ?>
+        <?php if ($userProfile): ?>
+            <div class="relative group">
+                <div class="profil-btn cursor-pointer bg-white rounded-full border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
+                    <a href="../public/profil.php"><img src="../public/pictures/<?=$userProfile["photo"]?>" class="rounded-full" alt="Profile"></a>
                 </div>
-                <div>
-                    <span class="font-bold">Email:</span> <?= htmlspecialchars($userProfile['email'], ENT_QUOTES, 'UTF-8') ?>
+                <div class="drop absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-xl text-black bg-orange-500  rounded-md shadow-md group-hover:block">
+                    <div><a href="../public/profil.php" class="px-4 hover:underline" c><i class="fa fa-user py-4 px-2"></i> My Profile</a></div>
+                    <div><a href="../public/cart.php" class="px-4 hover:underline"><i class="fa fa-shopping-cart   py-4 px-2"></i> My Orders</a></div>
+                    <div><a href="" class="px-4 hover:underline"><i class="fa fa-headphones  py-4 px-2"></i> Help & Support</a></div>
+                    <div><a href="../public/favorite.php" class="px-4 hover:underline"><i class="fa fa-store  py-4 px-2"></i> My Favorites </a></div>
+                    <div><a href="../public/contact.php" class="px-4 hover:underline"><i class="fa-solid fa-address-book py-4 px-2"></i>Contact Us </a></div>
+                    <div><a href="../includes/deconexion.php" class="px-4 hover:underline"><i class="fa fa-sign-out-alt  py-4 px-2"></i> Logout</a></div>
                 </div>
             </div>
-        </div>
-
-        <div class="profil-btn w-32 cursor-pointer bg-white rounded-xl border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
-            <a href="../includes/deconexion.php" class="fa-solid fa-arrow-right-from-bracket rounded-lg text-3xl text-orange-500"></a>
-            <span class="text-bold text-xl">Logout</span>
-        </div>
-     
-      <!-- <i class="fa-solid fa-arrow-right-from-bracket"></i> -->
+            <div class="profil-btn w-32 cursor-pointer bg-white rounded-xl border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
+                <a href="../includes/deconexion.php" class="fa-solid fa-arrow-right-from-bracket rounded-lg text-3xl text-orange-500"></a>
+                <span class="text-bold text-xl">Logout</span>
+            </div>
+        <?php else: ?>
+            <div class="relative group">
+                <div class="profil-btn cursor-pointer bg-white rounded-full border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
+                    <img src="../public/pictures/defaulpic.jpg" class="rounded-full" alt="Profile">
+                </div>
+                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
+                    <div class="flex flex-col items-start space-y-2">
+                        <a href="../public/login.php" class="text-white hover:underline">Login</a>
+                        <a href="../public/signup.php" class="text-white hover:underline">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </header>
-
     <script src="../assets/js/script.js"></script>
 </body>
 </html>
 <style>
+    .drop{
+            background-color: #ffffff;
+            background-image: radial-gradient(at 12% 45%, #32CD32 40%, transparent 20%),
+                radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
+       
+    }
     .navbar {
         display: flex;
         justify-content: space-between;

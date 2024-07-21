@@ -20,7 +20,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Side Navbar - monasabat</title>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link rel="stylesheet" href="../assets/css/styles.css">
   <link rel="stylesheet" href="../assets/css/table.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -77,11 +77,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span class="tooltip">Add Categories</span>
       </li>
       <li>
-        <a href="#">
-          <i class="bx bx-cog"></i>
-          <span class="title">Setting</span>
+        <a href="message.php">
+        <i class="fa-regular fa-message"></i>
+          <span class="title">Contacts</span>
         </a>
-        <span class="tooltip">Setting</span>
+        <span class="tooltip">Contacts</span>
       </li>
       <li>
         <a href="../includes/deconexion.php">

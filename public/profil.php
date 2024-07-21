@@ -40,7 +40,6 @@ if ($user_id) {
             } else {
                 $message = "Error: Unable to update username.";
             }
-            
         }
 
         // Update Email
@@ -116,9 +115,10 @@ if ($user_id) {
                 } else {
                     // if everything is ok, try to upload file
                     if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-                        $photo_path = $target_file;
+                        // Save only the filename in the database
+                        $photo_name = basename($target_file);
                         $stmt = $pdo->prepare("UPDATE users SET photo = ? WHERE id_user = ?");
-                        $stmt->execute([$photo_path, $user_id]);
+                        $stmt->execute([$photo_name, $user_id]);
                         if ($stmt->rowCount() > 0) {
                             $message = "Photo updated successfully.";
                         } else {
@@ -128,6 +128,8 @@ if ($user_id) {
                         $message = "Sorry, there was an error uploading your file.";
                     }
                 }
+            } else {
+                $message = "No file was uploaded.";
             }
         }
 
@@ -199,7 +201,17 @@ if ($user_id) {
         }
 
         .prof {
-            border-radius: 47% 53% 88% 12% / 49% 32% 68% 51%;
+            background-color: #ffffff;
+            background-image: radial-gradient(at 62% 65%, #06b6d4 40%, transparent 20%),
+                radial-gradient(at 22% 33%, #6d28d9 50%, transparent 50%);
+            /* border-radius: 47% 53% 88% 12% / 49% 32% 68% 51%; */
+            border-radius: 50%;
+        }
+
+        .cart {
+            background-color: #ffffff;
+            background-image: radial-gradient(at 12% 33%, #06b6d4 40%, transparent 20%),
+                radial-gradient(at 62% 65%, #6d28d9 50%, transparent 50%);
         }
     </style>
 </head>
@@ -209,9 +221,9 @@ if ($user_id) {
         <h1 class="text-4xl font-bold text-white mb-6 text-center">User Profile</h1>
         <div class="flex justify-center">
             <!-- User Profile Section -->
-            <div class="prof bg-gray-200 text-black shadow-md -mt-16 text-center py-28  w-2/5 h-1/5">
-                <div class="flex items-center justify-center space-x-6 mb-4">
-                    <img src="pictures/<?= htmlspecialchars($userProfile['photo'], ENT_QUOTES, 'UTF-8') ?>" class="rounded-full w-24 h-24 shadow-md border-4 border-gray-300 hover:border-orange-300" alt="Profile">
+            <div class="prof bg-gray-200 text-black shadow-md -mt-10 text-center py-20  w-2/5 h-1/5">
+                <div class="flex items-center justify-center space-x-6 mb-4" id="img_profil">
+                    <img src="pictures/<?= htmlspecialchars($userProfile['photo'], ENT_QUOTES, 'UTF-8') ?>"  class="rounded-full w-24 h-24 shadow-md border-4 border-gray-300 cursor-pointer hover:border-orange-300" alt="Profile">
                     <div>
                         <h3 class="text-4xl font-bold text-black"><?= htmlspecialchars($userProfile['username'], ENT_QUOTES, 'UTF-8') ?></h3>
                         <p class="text-lg text-black"><?= $userProfile['is_admin'] ? 'Admin Profile' : 'User Profile' ?></p>
@@ -257,15 +269,15 @@ if ($user_id) {
             </div>
 
             <!-- User Content Section -->
-            <div class="ml-auto w-1/2">
+            <div class=" ml-auto w-1/2">
                 <!-- User Cart Items -->
-                <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                <div class="cart  bg-white shadow-md rounded-lg p-6 mb-8">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">Cart Items</h3>
                     <?php if (!empty($cartItems)) { ?>
                         <ul>
                             <?php foreach ($cartItems as $item) { ?>
                                 <li class="flex items-center space-x-4 mb-4">
-                                    <img src="../admin/<?= htmlspecialchars($item['photo'], ENT_QUOTES, 'UTF-8') ?>" class="w-16 h-16 object-cover rounded-md" alt="<?= htmlspecialchars($item['nom_product'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <img src="../admin/<?= htmlspecialchars($item['photo'], ENT_QUOTES, 'UTF-8') ?>"  class="w-16 h-16 object-cover rounded-md" alt="<?= htmlspecialchars($item['nom_product'], ENT_QUOTES, 'UTF-8') ?>">
                                     <div class="flex-1">
                                         <h4 class="text-lg font-semibold"><?= htmlspecialchars($item['nom_product'], ENT_QUOTES, 'UTF-8') ?></h4>
                                         <p class="text-sm text-gray-500">Quantity: <?= htmlspecialchars($item['quantity'], ENT_QUOTES, 'UTF-8') ?></p>
@@ -282,7 +294,7 @@ if ($user_id) {
                 </div>
 
                 <!-- User Favorites -->
-                <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                <div class="cart bg-white shadow-md rounded-lg p-6 mb-8">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">Favorite Products</h3>
                     <?php if (!empty($favorites)) { ?>
                         <ul>
@@ -303,7 +315,7 @@ if ($user_id) {
                 </div>
 
                 <!-- User Reviews -->
-                <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="cart bg-white shadow-md rounded-lg p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">Reviews</h3>
                     <?php if (!empty($reviews)) { ?>
                         <ul>
@@ -372,7 +384,7 @@ if ($user_id) {
                 <input type="hidden" name="edit_phone" value="1">
                 <div class="mb-4">
                     <label for="phone" class="block text-gray-700">New Phone:</label>
-                    <input type="text" id="phone" name="phone" class="w-full px-3 py-2 border rounded">
+                    <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($userProfile['tel'], ENT_QUOTES, 'UTF-8') ?>" class="w-full px-3 py-2 border rounded">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" onclick="toggleModal('phoneModal')" id="num" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
@@ -419,6 +431,10 @@ if ($user_id) {
                 </form>
             </div>
         </div>
+        <div class="profil_picture hidden" id="profil_picture">
+            <img src="pictures/<?= htmlspecialchars($userProfile['photo'], ENT_QUOTES, 'UTF-8') ?>" alt="profil_picture">
+        </div>
+
     </div>
 
     <script>
@@ -427,8 +443,23 @@ if ($user_id) {
             modal.classList.toggle('hidden');
         }
 
-        // Close modals when clicking the close button
-        
+        function showImage() {
+            let img = document.getElementById("img_profil");
+            let pic = document.getElementById("profil_picture");
+
+            img.addEventListener("click", () => {
+                pic.style.display = "block";
+            });
+
+            pic.addEventListener("click", () => {
+                pic.style.display = "none"; // Corrected to "none" to hide the element
+            });
+        }
+
+        // Ensure the showImage function is called when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", showImage);
+
+
 
         // document.getElementById("num").addEventListener("click",()=>{
         //     window.location.href = "http://localhost/monasabat2/public/profil.php";
@@ -437,34 +468,33 @@ if ($user_id) {
     <?php if ($message) : ?>
         <script>
             function toggleModal(modalId) {
-            var modal = document.getElementById(modalId);
-            modal.classList.toggle('hidden');
-        }
+                var modal = document.getElementById(modalId);
+                modal.classList.toggle('hidden');
+            }
 
             window.addEventListener("DOMContentLoaded", (event) => {
-                        Swal.fire({
-                            icon: "info",
-                            title: "Notification!",
-                            text: "<?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?>",
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(() => {
-                            window.location.href = "profil.php";
-                        });
-                    });
-                    var closeButtons = document.querySelectorAll('.close');
-        closeButtons.forEach(function(button) {
-            button.onclick = function() {
-                button.parentElement.parentElement.classList.add('hidden');
-            }
-        });
+                Swal.fire({
+                    icon: "info",
+                    title: "Notification!",
+                    text: "<?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?>",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    window.location.href = "profil.php";
+                });
+            });
+            var closeButtons = document.querySelectorAll('.close');
+            closeButtons.forEach(function(button) {
+                button.onclick = function() {
+                    button.parentElement.parentElement.classList.add('hidden');
+                }
+            });
 
-        // // Only reload once after form submission
-        // if (performance.navigation.type === 1) {
-        //     // Page was reloaded
-        //     window.history.replaceState(null, null, window.location.href);
-        // }
-
+            // // Only reload once after form submission
+            // if (performance.navigation.type === 1) {
+            //     // Page was reloaded
+            //     window.history.replaceState(null, null, window.location.href);
+            // }
         </script>
     <?php endif; ?>
 </body>

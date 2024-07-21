@@ -2,11 +2,6 @@
 include_once("../includes/navbar.php");
 include_once("../includes/database.php");
 
-// if (!isset($_SESSION['id_user'])) {
-//     header("Location: login.php");
-//     exit();
-// }
-
 $id_user = $_SESSION['id_user'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -22,21 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($cart_item) {
                 $stmt = $pdo->prepare("UPDATE cart SET quantity = quantity + 1 WHERE id_user = :id_user AND id_product = :id_product");
                 $stmt->execute(['id_user' => $id_user, 'id_product' => $id_product]);
-                // echo '<script>
-                //     Swal.fire({
-                //         title: "Added to cart!",
-                //         text: "Product added to your cart successfully.",
-                //         icon: "success"
-                //     }).then(function() {
-                //         window.location.href = "products.php"; 
-                //     });
-                // </script>';
                 echo '<script>
                     window.addEventListener("DOMContentLoaded", (event) => {
                         Swal.fire({
                             icon: "success",
                             title: "Added to cart!",
-                            text: "Product already in  your cart .",
+                            text: "Product already in your cart.",
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
@@ -48,20 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $stmt = $pdo->prepare("INSERT INTO cart (id_user, id_product, quantity) VALUES (:id_user, :id_product, 1)");
                 $stmt->execute(['id_user' => $id_user, 'id_product' => $id_product]);
-                // echo '<script>
-                //     Swal.fire({
-                //         title: "Added to cart!",
-                //         text: "Product added to your cart successfully.",
-                //         icon: "success"
-                //     }).then(function() {
-                //         window.location.href = "products.php"; 
-                //     });
-                // </script>';
                 echo '<script>
                     window.addEventListener("DOMContentLoaded", (event) => {
                         Swal.fire({
                             icon: "success",
-                            title: "Added to cart!!",
+                            title: "Added to cart!",
                             text: "Product added to your cart successfully.",
                             showConfirmButton: false,
                             timer: 2000
@@ -81,21 +58,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!$favorite_item) {
                 $stmt = $pdo->prepare("INSERT INTO favorites (user_id, product_id) VALUES (:user_id, :product_id)");
                 $stmt->execute(['user_id' => $id_user, 'product_id' => $id_product]);
-                // echo '<script>
-                //     Swal.fire({
-                //         title: "Added to favorites!",
-                //         text: "Product added to your favorites successfully.",
-                //         icon: "success"
-                //     }).then(function() {
-                //         window.location.href = "products.php"; 
-                //     });
-                // </script>';
                 echo '<script>
                     window.addEventListener("DOMContentLoaded", (event) => {
                         Swal.fire({
                             icon: "success",
-                            title: "Added to favorites!!",
+                            title: "Added to favorites!",
                             text: "Product added to your favorites successfully.",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = "products.php";
+                        });
+                    });
+                </script>';
+                exit();
+            } else {
+                echo '<script>
+                    window.addEventListener("DOMContentLoaded", (event) => {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Already in favorites!",
+                            text: "Product is already added to your favorites.",
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
@@ -119,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="text-white">
                 <h1 class="text-xl font-bold">Product Search</h1>
             </div>
-            <form action="" method="get" class="flex items-center border border-gray-300 rounded-md overflow-hidden bg-white ">
-                <select name="category" class="px-4 py-2 border-none focus:ring-0">
+            <form action="" method="get" id="search-form" class="flex items-center border border-gray-300 rounded-md overflow-hidden bg-white">
+                <select name="category" class="px-4 py-2 border-none focus:ring-0" id="category">
                     <option value="">All Categories</option>
                     <?php
                     $categories = $pdo->query("SELECT id_category, name FROM categories")->fetchAll(PDO::FETCH_ASSOC);
@@ -129,15 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                     ?>
                 </select>
-                <input type="text" name="name" placeholder="Search products..." class="px-4 py-2 border-none focus:ring-0">
-                <button type="submit" class="bg-orange-400 text-white px-4 py-2 border-none focus:ring-0"><i class="fa fa-search"></i></button>
+                <input type="text" name="name" placeholder="Search products..." class="px-4 py-2 border-none focus:ring-0" id="search-input">
             </form>
         </div>
     </nav>
 
     <section id="products" class="mt-5">
         <div class="container mx-auto px-4">
-            <div class="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="products-div">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="products-div">
                 <?php
                 $sql = "SELECT * FROM products WHERE 1=1";
                 $params = [];
@@ -149,14 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!empty($_GET['category'])) {
                     $sql .= " AND category_id = ?";
                     $params[] = $_GET['category'];
-                }
-                if (!empty($_GET['min_price'])) {
-                    $sql .= " AND price >= ?";
-                    $params[] = $_GET['min_price'];
-                }
-                if (!empty($_GET['max_price'])) {
-                    $sql .= " AND price <= ?";
-                    $params[] = $_GET['max_price'];
                 }
 
                 $stmt = $pdo->prepare($sql);
@@ -216,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php include_once("../includes/footer.php"); ?>
 </div>
+
 <script>
 document.querySelectorAll('.product-image').forEach(image => {
     image.addEventListener('click', function() {
@@ -223,6 +198,41 @@ document.querySelectorAll('.product-image').forEach(image => {
         window.location.href = 'selected_product.php?id=' + productId;
     });
 });
+
+// Debounce function to limit the rate at which a function can fire
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+// Live search functionality with debounce
+function liveSearch() {
+    const name = document.getElementById('search-input').value;
+    const category = document.getElementById('category').value;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `search.php?name=${name}&category=${category}`, true);
+    xhr.onload = function() {
+        if (this.status === 200) {
+            document.getElementById('products-div').innerHTML = this.responseText;
+            document.querySelectorAll('.product-image').forEach(image => {
+                image.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-product-id');
+                    window.location.href = 'selected_product.php?id=' + productId;
+                });
+            });
+        }
+    };
+    xhr.send();
+}
+
+const debouncedLiveSearch = debounce(liveSearch, 300);
+
+document.getElementById('search-input').addEventListener('input', debouncedLiveSearch);
+document.getElementById('category').addEventListener('change', debouncedLiveSearch);
 </script>
 <style>
     .home nav {

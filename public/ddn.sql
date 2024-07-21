@@ -56,7 +56,23 @@ INSERT INTO `favorites` (`id_favorite`, `user_id`, `product_id`, `created_at`) V
 (7, 5, 4, '2024-06-15 02:18:45');
 
 -- --------------------------------------------------------
+--
+-- Structure de la table `orders`
+--
 
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nom_proprietaire` varchar(50) NOT NULL,
+  `prenom_proprietaire` varchar(50) NOT NULL,
+  `phone_number` varchar(15) NOT NULL,
+  `shipping_address` text NOT NULL,
+  `payment_method` varchar(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 --
 -- Structure de la table `products`
 --

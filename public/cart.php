@@ -38,11 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $del_order->execute([$id_cart]);
             header("Location: cart.php");
             exit();
-            echo json_encode(["status" => "success"]);
-            exit();
         } catch (PDOException $e) {
-            header("Location: cart.php");
-            exit();
             echo json_encode(["status" => "error", "message" => $e->getMessage()]);
             exit();
         }
@@ -105,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td class="p-4 text-center">
                                     <form action="cart.php" method="post" class="inline-block" id="form-<?= htmlspecialchars($item['id_cart']); ?>">
                                         <input type="hidden" name="id_cart" value="<?= htmlspecialchars($item['id_cart']); ?>">
-                                        <input type="hidden" name="token" value="<?= $token; ?>">
                                         <div class="flex items-center justify-center">
                                             <button type="button" class="decrease-quantity text-lg bg-gray-300 px-2 py-1 rounded-l-md" data-id="<?= htmlspecialchars($item['id_cart']); ?>">-</button>
                                             <input type="number" name="quantity" value="<?= htmlspecialchars($item['quantity']); ?>" min="1" max="<?= htmlspecialchars($item['max']); ?>" class="form-input w-12 text-center border-gray-300" id="quantity-<?= htmlspecialchars($item['id_cart']); ?>">
@@ -116,11 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </td>
                                 <td class="p-4 text-right text-xl font-semibold">$<?= number_format($product_total, 2); ?></td>
                                 <td class="p-4 text-center">
-                                    <form action="cart.php" method="post">
-                                        <input type="hidden" name="id_cart" value="<?= htmlspecialchars($item['id_cart']); ?>">
-                                        <input type="hidden" name="token" value="<?= $token; ?>">
-                                        <button type="submit" name="del" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                                    </form>
+                                    <button type="button" class="text-red-500 hover:text-red-700 delete-btn" data-id="<?= htmlspecialchars($item['id_cart']); ?>"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -146,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <span>Order total</span>
                 <span class="text-gray-800">$<?= number_format($total_price + 5.00 + 8.32, 2); ?></span>
             </div>
-            <a href="payement.php" class="bg-indigo-600 text-white text-center py-3 px-6 rounded-md hover:bg-indigo-700 transition block mt-6">Checkout</a>
+            <a href="checkout.php" class="bg-indigo-600 text-white text-center py-3 px-6 rounded-md hover:bg-indigo-700 transition block mt-6">Checkout</a>
         </div>
     </div>
     <?php include_once("../includes/footer.php"); ?>
@@ -182,6 +173,43 @@ document.querySelectorAll('.increase-quantity').forEach(button => {
             input.value = quantity + 1;
             updateQuantity(cartId, quantity + 1);
         }
+    });
+});
+
+document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const cartId = this.getAttribute('data-id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#32CD32',
+            cancelButtonColor: '#ff7a00',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = 'cart.php';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'id_cart';
+                input.value = cartId;
+
+                const delInput = document.createElement('input');
+                delInput.type = 'hidden';
+                delInput.name = 'del';
+
+                form.appendChild(input);
+                form.appendChild(delInput);
+                document.body.appendChild(form);
+                form.submit();
+                
+            }
+            window.location.href = "cart.php";
+        })
     });
 });
 
