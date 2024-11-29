@@ -27,6 +27,7 @@ if ($user_id) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -42,7 +43,10 @@ if ($user_id) {
     <link rel="stylesheet" href="../assets/css/tailwind-output.css">
     <link rel="stylesheet" href="../assets/css/nav.css">
     <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="icon" href="../assets/images/icon.png" type="image/png">
+
 </head>
+
 <body>
     <header class="header">
         <img src="../assets/images/logo.png" alt="Logo" class="logo" id="logo">
@@ -78,11 +82,17 @@ if ($user_id) {
             </div>
             <div class="relative group" title="Cart">
                 <div class="fas fa-shopping-cart text-gray-700 cursor-pointer" id="cart-btn"></div>
-                <?php if (htmlspecialchars($orders['n_orders'])>0):?>
-                <span class="absolute -top-4 -right-2 inline-flex items-center justify-center w-9 h-9 text-lg font-bold text-white bg-green-600 rounded-full shadow-md"><?= htmlspecialchars($orders['n_orders'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php if (htmlspecialchars($orders['n_orders']) > 0) : ?>
+                    <span class="absolute -top-4 -right-2 inline-flex items-center justify-center w-9 h-9 text-lg font-bold text-white bg-green-600 rounded-full shadow-md"><?= htmlspecialchars($orders['n_orders'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <?php endif; ?>
                 <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
                     Cart
+                </span>
+            </div>
+            <div class="relative group" title="reviews">
+                <div class="fa-solid fa-ranking-star text-gray-700 cursor-pointer" id="review-btn"></div>
+                <span class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
+                    My Reviews
                 </span>
             </div>
         </div>
@@ -90,13 +100,16 @@ if ($user_id) {
             <input type="search" name="name" id="search-box" placeholder="Search here...">
             <button type="submit" name="search" class="fas fa-search text-3xl mx-6"></button>
         </form>
-        <?php if ($userProfile): ?>
+        <?php if ($userProfile) : ?>
             <div class="relative group">
                 <div class="profil-btn cursor-pointer bg-white rounded-full border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
-                    <a href="../public/profil.php"><img src="../public/pictures/<?=$userProfile["photo"]?>" class="rounded-full" alt="Profile"></a>
+                    <a href="../public/profil.php"><img src="../public/pictures/<?= $userProfile["photo"] ?>" class="rounded-full" alt="Profile"></a>
                 </div>
-                <div class="drop absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-xl text-black bg-orange-500  rounded-md shadow-md group-hover:block">
-                    <div><a href="../public/profil.php" class="px-4 hover:underline" c><i class="fa fa-user py-4 px-2"></i> My Profile</a></div>
+                <div class="drop absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden text-start w-max px-3 py-2 text-2xl text-black bg-orange-500  rounded-md shadow-md group-hover:block">
+                    <div>
+                        <h1 class="px-4  border-b-2 text-3xl text-gray-50 p-3 font-bold  text-center"> Hi <?= $userProfile["username"] ?></h1>
+                    </div>
+                    <div><a href="../public/profil.php" class="px-4 hover:underline"><i class="fa fa-user py-4 px-2"></i> My Profile</a></div>
                     <div><a href="../public/cart.php" class="px-4 hover:underline"><i class="fa fa-shopping-cart   py-4 px-2"></i> My Orders</a></div>
                     <div><a href="" class="px-4 hover:underline"><i class="fa fa-headphones  py-4 px-2"></i> Help & Support</a></div>
                     <div><a href="../public/favorite.php" class="px-4 hover:underline"><i class="fa fa-store  py-4 px-2"></i> My Favorites </a></div>
@@ -104,19 +117,19 @@ if ($user_id) {
                     <div><a href="../includes/deconexion.php" class="px-4 hover:underline"><i class="fa fa-sign-out-alt  py-4 px-2"></i> Logout</a></div>
                 </div>
             </div>
-            <div class="profil-btn w-32 cursor-pointer bg-white rounded-xl border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
+            <div class="profil-btn w-32 cursor-pointer bg-white rounded-xl border-4 border-gray-300  hover:border-orange-300 " id="profil-btn">
                 <a href="../includes/deconexion.php" class="fa-solid fa-arrow-right-from-bracket rounded-lg text-3xl text-orange-500"></a>
                 <span class="text-bold text-xl">Logout</span>
             </div>
-        <?php else: ?>
+        <?php else : ?>
             <div class="relative group">
                 <div class="profil-btn cursor-pointer bg-white rounded-full border-4 border-gray-300 hover:border-orange-300" id="profil-btn">
                     <img src="../public/pictures/defaulpic.jpg" class="rounded-full" alt="Profile">
                 </div>
                 <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden w-max px-3 py-2 text-lg text-white bg-orange-500 rounded-md shadow-md group-hover:block">
                     <div class="flex flex-col items-start space-y-2">
-                        <a href="../public/login.php" class="text-white hover:underline">Login</a>
-                        <a href="../public/signup.php" class="text-white hover:underline">Sign Up</a>
+                        <a href="../public/login.php" class="text-white text-3xl  hover:underline">Login</a>
+                        <a href="../public/signup.php" class="text-white text-3xl py-4 hover:underline">Sign Up</a>
                     </div>
                 </div>
             </div>
@@ -124,13 +137,17 @@ if ($user_id) {
     </header>
     <script src="../assets/js/script.js"></script>
 </body>
+
 </html>
 <style>
-    .drop{
-            background-color: #ffffff;
-            background-image: radial-gradient(at 12% 45%, #32CD32 40%, transparent 20%),
-                radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
-       
+    .drop {
+        background-color: #ffffff;
+        background-image: radial-gradient(at 12% 45%, #32CD32 40%, transparent 20%),
+            radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
+
+    }
+    .drop h1{
+        color:black 	;
     }
     .navbar {
         display: flex;
@@ -141,6 +158,7 @@ if ($user_id) {
     .group:hover .group-hover\:block {
         display: block
     }
+
     .navbar.active {
         display: block;
         position: absolute;
@@ -155,9 +173,15 @@ if ($user_id) {
         display: none;
     }
 
-    .profil-btn:hover + .profile-form, 
+    .profil-btn:hover+.profile-form,
     .profile-form:hover {
         display: block;
+    }
+
+    @media (max-width:450px) {
+        .profil-btn:first-child {
+            display: none;
+        }
     }
 </style>
 <script>
@@ -169,7 +193,7 @@ if ($user_id) {
         let loginForm = document.querySelector('.login-form');
         let navbar = document.querySelector('.navbar');
         let profileForm = document.getElementById('profile-form');
-        
+
         let searchBtn = document.getElementById('search-btn');
         if (searchBtn) {
             searchBtn.onclick = () => {
@@ -194,6 +218,13 @@ if ($user_id) {
             favBtn.onclick = () => {
                 console.log('Favorites button clicked');
                 window.location.href = "http://localhost/monasabat2/public/favorite.php";
+            };
+        }
+        let revBtn = document.getElementById('review-btn');
+        if (revBtn) {
+            revBtn.onclick = () => {
+                console.log('reviews button clicked');
+                window.location.href = "http://localhost/monasabat2/public/all_reviews.php";
             };
         }
 
@@ -239,37 +270,37 @@ if ($user_id) {
         document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
-                
+
                 let formData = new FormData(form);
 
                 fetch('cart.php', {
-                    method: 'POST',
-                    body: formData
-                }).then(response => response.json())
-                  .then(data => {
-                      if (data.success) {
-                          Swal.fire({
-                              title: 'Added to cart!',
-                              text: 'Product added to your cart successfully.',
-                              icon: 'success',
-                              confirmButtonText: 'OK'
-                          });
-                      } else {
-                          Swal.fire({
-                              title: 'Error!',
-                              text: 'There was an error adding the product to your cart.',
-                              icon: 'error',
-                              confirmButtonText: 'OK'
-                          });
-                      }
-                  }).catch(error => {
-                      Swal.fire({
-                          title: 'Error!',
-                          text: 'There was an error adding the product to your cart.',
-                          icon: 'error',
-                          confirmButtonText: 'OK'
-                      });
-                  });
+                        method: 'POST',
+                        body: formData
+                    }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Added to cart!',
+                                text: 'Product added to your cart successfully.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'There was an error adding the product to your cart.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    }).catch(error => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'There was an error adding the product to your cart.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
             });
         });
     });

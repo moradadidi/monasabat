@@ -97,23 +97,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($product['nom_product']) ?> - Online Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+<style>
+    .review {
+        background-color: #ffffff;
+        background-image: radial-gradient(at 12% 45%, #32CD32 40%, transparent 20%),
+            radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
+    }
+    .image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px; /* Set a fixed height for the image container */
+        padding: 10px;
+        overflow: hidden; /* Ensure any overflow content is hidden */
+    }
+
+    .image img {
+        width: auto; /* Let the width adjust automatically */
+        height: 100%; /* Set the height to fill the container */
+        object-fit: cover; /* Ensure the image covers the container, cropping if necessary */
+    }
+</style>
 <body class="bg-gray-100">
     <div class="home">
         <div class="max-w-screen-lg mx-auto mt-12 p-4">
             <div class="bg-white p-12 rounded-lg shadow-lg flex flex-col md:flex-row">
-                <div class="md:w-1/2">
-                    <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" alt="<?= htmlspecialchars($product['nom_product']) ?>" class="w-full rounded-lg">
+                <div class="img md:w-1/2 h-1/3">
+                    <div class="image">
+                        <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" alt="<?= htmlspecialchars($product['nom_product']) ?>" class="w-full h-5/6 rounded-lg">
+                    </div>
                     <div class="mt-4 grid grid-cols-3 gap-4">
                         <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" alt="<?= htmlspecialchars($product['nom_product']) ?>" class="w-full h-24 rounded-lg object-cover">
                         <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" alt="<?= htmlspecialchars($product['nom_product']) ?>" class="w-full h-24 rounded-lg object-cover">
@@ -127,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="text-5xl text-gray-800 font-bold">$<?= htmlspecialchars($product['price']) ?></div>
                         <div class="text-2xl text-red-500 ml-4">Discount 10%</div>
                         <div class="flex items-center ml-4 text-yellow-500">
-                        <?php
+                            <?php
                                 $avg_rating = round($avg_rat['average_rating'] * 2) / 2; // Round to nearest half
                                 for ($i = 0; $i < floor($avg_rating); $i++) {
                                     echo '<span class="fas fa-star"></span>';
@@ -139,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     echo '<span class="far fa-star"></span>';
                                 }
                             ?>
-                            <span class="ml-2 text-gray-600 text-lg">(<?= count($reviews) ?> Reviews)</span>
+                            <a href="pro_review.php?id_product=<?= htmlspecialchars($product['id_product']) ?>" class="ml-2 text-gray-600 text-lg hover:underline">(<?= count($reviews) ?> Reviews)</a>
                         </div>
                     </div>
                     
@@ -149,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="mt-6 text-gray-700 text-xl">
                         <p class="text-2xl font-bold"><?= htmlspecialchars($product['description']) ?></p>
                     </div>
-                    <?php if ($product["category_id"] == 2 || $product["category_id"] == 3) { ?>
+                    <?php if ($product["category_id"] == 4 || $product["category_id"] == 3) { ?>
                         <label for="category" class="block text-xl my-7 font-semibold text-gray-700 mb-2">Size:</label>
                         <div class="relative">
                             <select id="category" class="block appearance-none text-lg font-bold w-5xl bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg shadow leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -168,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <li class="text-gray-700">No Import Charges & $38.44 Shipping to Morocco Details</li>
                             <li class="text-gray-700">Available at a lower price from other sellers that may not offer free Prime shipping.</li>
                         </ul>
-                    </div
+                    </div>
 
                     <form action="" method="post">
                         <div class="flex mt-8 space-y-4">
@@ -183,15 +197,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </form>
                 </div>
             </div>
-            <div class="mt-12 bg-white p-12 rounded-lg shadow-lg">
+            <div class="review mt-12 bg-white p-12 rounded-lg shadow-lg">
                 <h2 class="text-3xl font-semibold text-gray-800">Customer Reviews</h2>
                 <div class="mt-8 space-y-8">
-                    
-                    <?php foreach ($reviews as $review) { 
-                        if(count($reviews)){?>
+                    <?php if (count($reviews) > 0) {
+                        foreach ($reviews as $review) { ?>
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
-                                <img src="../admin/pictures/<?= htmlspecialchars($review['photo']) ?>" alt="Reviewer" class="w-14 h-14 rounded-full">
+                                <img src="pictures/<?= htmlspecialchars($review['photo']) ?>" alt="Reviewer" class="w-14 h-14 rounded-full">
                             </div>
                             <div class="ml-6">
                                 <div class="text-2xl font-semibold text-gray-800"><?= htmlspecialchars($review['username']) ?></div>
@@ -203,24 +216,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                     <span class="ml-2 text-gray-600 text-lg"><?= htmlspecialchars($review['created_at2']) ?></span>
                                 </div>
-                                
                                 <div class="mt-4 text-gray-700 text-xl"><?= htmlspecialchars($review['comment']) ?></div>
                             </div>
                         </div>
-                    <?php }else{
-                        ?>
+                    <?php } 
+                    } else { ?>
                         <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                            
+                            <div class="ml-6">
+                                <div class="text-2xl font-semibold text-gray-800">No reviews yet. Be the first to review!</div>
                             </div>
                         </div>
-                        <?php
-                    }
-                } ?>
+                    <?php } ?>
                 </div>
             </div>
         </div>
     </div>
 </body>
 </html>
-

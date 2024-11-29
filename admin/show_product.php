@@ -19,6 +19,12 @@ $message_type = "";
 
 if (isset($_POST["del"])) {
     $id = $_POST["id"];
+
+    // Delete related records from the cart table
+    $data = $pdo->prepare('DELETE FROM cart WHERE id_product = ?');
+    $data->execute([$id]);
+
+    // Then delete the product from the products table
     $data = $pdo->prepare('DELETE FROM products WHERE id_product = ?');
     if ($data->execute([$id])) {
         $message = "Produit supprimé avec succès.";
@@ -27,6 +33,7 @@ if (isset($_POST["del"])) {
         $message = "Erreur lors de la suppression du produit.";
         $message_type = "error";
     }
+
     echo "<script>
             window.addEventListener('DOMContentLoaded', (event) => {
                 Swal.fire({
@@ -43,16 +50,7 @@ if (isset($_POST["del"])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Products</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body "\>
+
     <section class="home" style="background-color:white">
         <div class="container">
             <div class="max-w-lg">
@@ -84,7 +82,6 @@ if (isset($_POST["del"])) {
                                     <td class="py-3 px-6"><?= htmlspecialchars($product['price']) ?></td>
                                     <td class="py-3 px-6"><?= htmlspecialchars($product['quantity']) ?></td>
                                     <td class="py-3 px-6"><?= htmlspecialchars($product['description']) ?></td>
-
                                     <td>
                                         <form action="" method="post">
                                             <input type="hidden" name="id" value="<?= htmlspecialchars($product['id_product']) ?>">
@@ -107,5 +104,4 @@ if (isset($_POST["del"])) {
             </div>
         </div>
     </section>
-</body>
-</html>
+

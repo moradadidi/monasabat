@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </td>
                                 <td class="p-4 text-right text-xl font-semibold">$<?= number_format($product_total, 2); ?></td>
                                 <td class="p-4 text-center">
-                                    <button type="button" class="text-red-500 hover:text-red-700 delete-btn" data-id="<?= htmlspecialchars($item['id_cart']); ?>"><i class="fas fa-trash"></i></button>
+                                    <button type="button" class="text-red-500 hover:text-red-700 delete-btn" data-id="<?= htmlspecialchars($item['id_cart']); ?>"><i class="fas fa-trash text-2xl"></i></button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -189,29 +189,31 @@ document.querySelectorAll('.delete-btn').forEach(button => {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                const form = document.createElement('form');
-                form.method = 'post';
-                form.action = 'cart.php';
+                const formData = new FormData();
+                formData.append('id_cart', cartId);
+                formData.append('del', 'true');
 
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'id_cart';
-                input.value = cartId;
-
-                const delInput = document.createElement('input');
-                delInput.type = 'hidden';
-                delInput.name = 'del';
-
-                form.appendChild(input);
-                form.appendChild(delInput);
-                document.body.appendChild(form);
-                form.submit();
-                
+                fetch('cart.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('Item deleted successfully');
+                        location.reload(); // Reload the page after successful deletion
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
-            window.location.href = "cart.php";
-        })
+        });
     });
 });
+
 
 function updateQuantity(cartId, quantity) {
     const form = document.getElementById('form-' + cartId);
@@ -227,7 +229,7 @@ function updateQuantity(cartId, quantity) {
     .then(data => {
         if (data.status === 'success') {
             console.log('Quantity updated successfully');
-            // Optionally update the total price here without reloading
+            location.reload();
         } else {
             console.error('Error:', data.message);
         }

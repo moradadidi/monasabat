@@ -37,12 +37,12 @@ if (!empty($product_name)) {
             <button id="decline-cookies" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">Decline</button>
         </div>
     </div>
-    <?php if (!empty($sel_products)): ?>
+    <?php if (!empty($sel_products)) : ?>
         <section class="search-results mt-8">
             <div class="container mx-auto px-4">
                 <h4 class="font-bold text-2xl text-gray-800 mb-8">Search Results</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <?php foreach ($sel_products as $product): ?>
+                    <?php foreach ($sel_products as $product) : ?>
                         <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
                             <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" class="w-full h-48 object-cover" alt="<?= htmlspecialchars($product['nom_product']) ?>">
                             <div class="card-body p-4">
@@ -59,37 +59,37 @@ if (!empty($product_name)) {
                 </div>
             </div>
         </section>
-    <?php else: ?>
+    <?php else : ?>
         <section id="Carousel" class="mb-8">
-    <div id="carouselExampleIndicators" class="relative">
-        <!-- Carousel Indicators -->
-        <div class="absolute bottom-0 left-0 right-0 flex justify-center p-4 space-x-2">
-            <button type="button" data-slide-to="0" class="w-3 h-3 bg-white rounded-full active"></button>
-            <button type="button" data-slide-to="1" class="w-3 h-3 bg-white rounded-full"></button>
-            <button type="button" data-slide-to="2" class="w-3 h-3 bg-white rounded-full"></button>
-            <button type="button" data-slide-to="3" class="w-3 h-3 bg-white rounded-full"></button>
-            <button type="button" data-slide-to="4" class="w-3 h-3 bg-white rounded-full"></button>
-        </div>
-        <!-- Carousel Items -->
-        <div class="carousel-inner relative overflow-hidden w-full h-screen">
-            <div class="carousel-item active absolute w-full transition-transform duration-500">
-                <img src="../assets/images/sprt.jpeg" class="w-full h-full object-cover" alt="First slide">
+            <div id="carouselExampleIndicators" class="relative">
+                <!-- Carousel Indicators -->
+                <div class="absolute bottom-0 left-0 right-0 flex justify-center p-4 space-x-2">
+                    <button type="button" data-slide-to="0" class="w-3 h-3 bg-white rounded-full active"></button>
+                    <button type="button" data-slide-to="1" class="w-3 h-3 bg-white rounded-full"></button>
+                    <button type="button" data-slide-to="2" class="w-3 h-3 bg-white rounded-full"></button>
+                    <button type="button" data-slide-to="3" class="w-3 h-3 bg-white rounded-full"></button>
+                    <button type="button" data-slide-to="4" class="w-3 h-3 bg-white rounded-full"></button>
+                </div>
+                <!-- Carousel Items -->
+                <div class="carousel-inner relative overflow-hidden w-full h-screen">
+                    <div class="carousel-item active absolute w-full transition-transform duration-500">
+                        <img src="../assets/images/sprt.jpeg" class="w-full h-full object-cover" alt="First slide">
+                    </div>
+                    <div class="carousel-item absolute w-full transition-transform duration-500">
+                        <img src="../assets/images/bok.webp" class="w-full h-full object-cover" alt="Second slide">
+                    </div>
+                    <div class="carousel-item absolute w-full transition-transform duration-500">
+                        <img src="../assets/images/elctron.jpeg" class="w-full h-full object-cover" alt="Third slide">
+                    </div>
+                    <div class="carousel-item absolute w-full transition-transform duration-500">
+                        <img src="../assets/images/men.webp" class="w-full h-full object-cover" alt="fourth slide">
+                    </div>
+                    <div class="carousel-item absolute w-full transition-transform duration-500">
+                        <img src="../assets/images/women.webp" class="w-full h-full object-cover" alt="five slide">
+                    </div>
+                </div>
             </div>
-            <div class="carousel-item absolute w-full transition-transform duration-500">
-                <img src="../assets/images/bok.webp" class="w-full h-full object-cover" alt="Second slide">
-            </div>
-            <div class="carousel-item absolute w-full transition-transform duration-500">
-                <img src="../assets/images/elctron.jpeg" class="w-full h-full object-cover" alt="Third slide">
-            </div>
-            <div class="carousel-item absolute w-full transition-transform duration-500">
-                <img src="../assets/images/men.webp" class="w-full h-full object-cover" alt="fourth slide">
-            </div>
-            <div class="carousel-item absolute w-full transition-transform duration-500">
-                <img src="../assets/images/women.webp" class="w-full h-full object-cover" alt="five slide">
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <section id="categories" class="mt-5">
             <div class="container mx-auto px-4">
@@ -99,7 +99,7 @@ if (!empty($product_name)) {
                 <div class="relative">
                     <div class="swiper-container">
                         <div class="swiper-wrapper ">
-                            <?php foreach ($categories as $category): ?>
+                            <?php foreach ($categories as $category) : ?>
                                 <div class="swiper-slide hover:scale-105 duration-300">
                                     <a href="categorie.php?cat=<?= htmlspecialchars($category['id_category']) ?>" class="block relative category-card">
                                         <img src="../admin/<?= htmlspecialchars($category['photo']) ?>" class="w-full h-56 object-cover" alt="<?= htmlspecialchars($category['name']) ?>">
@@ -128,64 +128,68 @@ if (!empty($product_name)) {
         </section>
 
         <section id="products" class="mt-5">
-        <div class="container mx-auto px-4">
-            
-            <div class="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="products-div">
-   
+            <div class="container mx-auto px-4">
 
-                <?php foreach ($hot_deals as $deal): ?>
-                    
-                    <div class="card bg-white shadow-lg rounded-lg overflow-hidden relative group">
-                    <img src="../admin/<?= htmlspecialchars($deal['photo']) ?>" class="cursor-pointer  product-image" alt="<?= htmlspecialchars($deal['nom_product']) ?>" data-product-id="<?= $deal['id_product'] ?>">
-                    <div class="card-body  p-4">
-                            <div class="card-header flex justify-between items-center mb-2">
-                                <?php
-                                $id_product= $deal['id_product'] ;
-                                $data = $pdo->prepare("
+                <div class="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="products-div">
+
+
+                    <?php foreach ($hot_deals as $deal) : ?>
+
+                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden relative group">
+                            <div class="image">
+                                <img src="../admin/<?= htmlspecialchars($deal['photo']) ?>" class="cursor-pointer h-full product-image" alt="<?= htmlspecialchars($deal['nom_product']) ?>" data-product-id="<?= $deal['id_product'] ?>">
+                            </div>
+                            <div class="card-body  p-4">
+                                <div class="card-header flex justify-between items-center mb-2">
+                                    <?php
+                                    $id_product = $deal['id_product'];
+                                    $data = $pdo->prepare("
                                 SELECT R.*, U.username, U.photo 
                                 FROM review R 
                                 INNER JOIN users U ON R.id_user = U.id_user 
                                 WHERE R.id_product = :id_product
                             ");
-                            $data->execute(['id_product' => $id_product]);
-                            $reviews = $data->fetchAll(PDO::FETCH_ASSOC);
-                            
-                            $id_product= $deal['id_product'] ;
-                            $avg = $pdo->prepare("SELECT AVG(R.rating) AS average_rating FROM review R WHERE R.id_product = :id_product");
-                            $avg->execute(['id_product' => $id_product]);
-                            $avg_rat = $avg->fetch(PDO::FETCH_ASSOC);
-                                ?>
-                                <span class="reviews text-yellow-500">
-                                <?php
-                                $avg_rating = round($avg_rat['average_rating'] * 2) / 2; // Round to nearest half
-                                for ($i = 0; $i < floor($avg_rating); $i++) {
-                                    echo '<i class="fas fa-star"></i>';
-                                }
-                                if ($avg_rating - floor($avg_rating) > 0) {
-                                    echo '<i class="fas fa-star-half-alt"></i>';
-                                }
-                                for ($i = ceil($avg_rating); $i < 5; $i++) {
-                                    echo '<i class="far fa-star"></i>';
-                                }
-                            ?> 
-                             </span>
-                                <span class="price text-lg font-bold text-gray-800">$<?= htmlspecialchars($deal['price']) ?></span>
-                            </div>
-                            <h5 class="card-title font-semibold text-lg text-gray-900"><?= htmlspecialchars($deal['nom_product']) ?></h5>
-                            <p class="card-text text-gray-600 mb-4"><?= htmlspecialchars($deal['description']) ?></p>
-                        </div>
-                        <form action="" method="post" class="absolute top-0 left-0 right-0 flex justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <input type="hidden" name="id_product" value="<?= htmlspecialchars($deal['id_product']) ?>">
-                            <button name="like" class="text-red-500 hover:text-red-700"><i class="fa fa-heart text-4xl"></i></button>
-                            <button name="add" class="text-orange-500    rounded-lg  hover:text-orange-600"><i class="fa-solid fa-cart-plus text-4xl"></i></button>
-                        </form>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
+                                    $data->execute(['id_product' => $id_product]);
+                                    $reviews = $data->fetchAll(PDO::FETCH_ASSOC);
 
-   
+                                    $id_product = $deal['id_product'];
+                                    $avg = $pdo->prepare("SELECT AVG(R.rating) AS average_rating , COUNT(R.id_product) AS total_rating FROM review R WHERE R.id_product = :id_product");
+                                    $avg->execute(['id_product' => $id_product]);
+                                    $avg_rat = $avg->fetch(PDO::FETCH_ASSOC);
+                                    ?>
+                                    <span class="reviews text-yellow-500">
+                                        <?php
+                                        $avg_rating = round($avg_rat['average_rating'] * 2) / 2; // Round to nearest half
+                                        for ($i = 0; $i < floor($avg_rating); $i++) {
+                                            echo '<i class="fas fa-star"></i>';
+                                        }
+                                        if ($avg_rating - floor($avg_rating) > 0) {
+                                            echo '<i class="fas fa-star-half-alt"></i>';
+                                        }
+                                        for ($i = ceil($avg_rating); $i < 5; $i++) {
+                                            echo '<i class="far fa-star"></i>';
+                                        }
+                                        ?>
+                                        <a href="pro_review.php?id_product=<?= htmlspecialchars($deal['id_product'])  ?>" class="text-red-600">(<?= $avg_rat['total_rating'] ?> Reviews)</a>
+
+                                    </span>
+                                    <span class="price text-lg font-bold text-gray-800">$<?= htmlspecialchars($deal['price']) ?></span>
+                                </div>
+                                <h5 class="card-title font-semibold text-lg text-gray-900"><?= htmlspecialchars($deal['nom_product']) ?></h5>
+                                <!-- <p class="card-text text-gray-600 mb-4"><?= htmlspecialchars($deal['description']) ?></p> -->
+                            </div>
+                            <form action="" method="post" class="absolute top-0 left-0 right-0 flex justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <input type="hidden" name="id_product" value="<?= htmlspecialchars($deal['id_product']) ?>">
+                                <button name="like" class="text-red-500 hover:text-red-700"><i class="fa fa-heart text-4xl"></i></button>
+                                <button name="add" class="text-orange-500    rounded-lg  hover:text-orange-600"><i class="fa-solid fa-cart-plus text-4xl"></i></button>
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+
+
     <?php endif; ?>
 
     <?php
@@ -217,7 +221,7 @@ if (!empty($product_name)) {
                         });
                     });
                 </script>';
-                exit();
+                    exit();
                 } else {
                     $stmt = $pdo->prepare("INSERT INTO cart (id_user, id_product, quantity) VALUES (:id_user, :id_product, 1)");
                     $stmt->execute(['id_user' => $id_user, 'id_product' => $id_product]);
@@ -234,10 +238,8 @@ if (!empty($product_name)) {
                         });
                     });
                 </script>';
-                exit();
+                    exit();
                 }
-
-                
             } elseif (isset($_POST['like'])) {
                 // Add to favorites logic
                 $stmt = $pdo->prepare("SELECT * FROM favorites WHERE user_id = :user_id AND product_id = :product_id");
@@ -260,8 +262,8 @@ if (!empty($product_name)) {
                         });
                     });
                 </script>';
-                exit();
-                }else{
+                    exit();
+                } else {
                     echo '<script>
                             Swal.fire({
                                 icon: "warning",
@@ -281,25 +283,25 @@ if (!empty($product_name)) {
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-         const cookieConsent = document.getElementById('cookie-consent');
-            const acceptCookies = document.getElementById('accept-cookies');
-            const declineCookies = document.getElementById('decline-cookies');
-            const consentStatus = localStorage.getItem('cookieConsent');
+    document.addEventListener('DOMContentLoaded', function() {
+        const cookieConsent = document.getElementById('cookie-consent');
+        const acceptCookies = document.getElementById('accept-cookies');
+        const declineCookies = document.getElementById('decline-cookies');
+        const consentStatus = localStorage.getItem('cookieConsent');
 
-            if (!consentStatus) {
-                cookieConsent.classList.remove('hidden');
-            }
+        if (!consentStatus) {
+            cookieConsent.classList.remove('hidden');
+        }
 
-            acceptCookies.addEventListener('click', function() {
-                localStorage.setItem('cookieConsent', 'accepted');
-                cookieConsent.classList.add('hidden');
-            });
+        acceptCookies.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            cookieConsent.classList.add('hidden');
+        });
 
-            declineCookies.addEventListener('click', function() {
-                localStorage.setItem('cookieConsent', 'declined');
-                cookieConsent.classList.add('hidden');
-            });
+        declineCookies.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'declined');
+            cookieConsent.classList.add('hidden');
+        });
         const swiper = new Swiper('.swiper-container', {
             loop: true,
             pagination: {
@@ -330,12 +332,12 @@ if (!empty($product_name)) {
     });
 </script>
 <script>
-document.querySelectorAll('.product-image').forEach(image => {
-    image.addEventListener('click', function() {
-        const productId = this.getAttribute('data-product-id');
-        window.location.href = 'selected_product.php?id=' + productId;
+    document.querySelectorAll('.product-image').forEach(image => {
+        image.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            window.location.href = 'selected_product.php?id=' + productId;
+        });
     });
-});
 </script>
 <style>
     .category-card {
@@ -352,16 +354,16 @@ document.querySelectorAll('.product-image').forEach(image => {
     }
 
     .category-card img {
-        height: 300px; 
+        height: 300px;
         object-fit: cover;
     }
 
     .category-name-overlay h5 {
-        font-size: 24px; 
+        font-size: 24px;
     }
 
     .category-name-overlay p {
-        font-size: 16px; 
+        font-size: 16px;
         margin: 0;
     }
 
@@ -375,7 +377,8 @@ document.querySelectorAll('.product-image').forEach(image => {
         justify-content: center;
         align-items: center;
         color: white;
-        margin-top: -25px; /* Align vertically with images */
+        margin-top: -25px;
+        /* Align vertically with images */
     }
 
     .swiper-button-next::after,
@@ -387,12 +390,33 @@ document.querySelectorAll('.product-image').forEach(image => {
     .swiper-button-prev:hover {
         background-color: rgba(0, 0, 0, 0.8);
     }
-    .swiper-pagination{
-        translate:0 50px;
+
+    .swiper-pagination {
+        translate: 0 50px;
+    }
+
+    .image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        /* Set a fixed height for the image container */
+        padding: 10px;
+        overflow: hidden;
+        /* Ensure any overflow content is hidden */
+    }
+
+    .image img {
+        width: auto;
+        /* Let the width adjust automatically */
+        height: 100%;
+        /* Set the height to fill the container */
+        object-fit: cover;
+        /* Ensure the image covers the container, cropping if necessary */
     }
 </style>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         let currentIndex = 0;
         const slides = document.querySelectorAll('.carousel-item');
         const indicators = document.querySelectorAll('[data-slide-to]');
@@ -431,8 +455,8 @@ document.addEventListener('DOMContentLoaded', function () {
     .carousel-item {
         transform: translateX(100%);
     }
+
     .carousel-item.active {
         transform: translateX(0);
     }
 </style>
-

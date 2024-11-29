@@ -6,7 +6,7 @@ if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit();
 }
-
+$category_id = $_GET['cat'] ?? null;
 $id_user = $_SESSION['id_user'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            window.location.href = "products.php";
+                            window.location.href = "categorie.php?cat='.htmlspecialchars( $category_id ).'";
                         });
                     });
                 </script>';
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            window.location.href = "products.php";
+                            window.location.href = "categorie.php?cat='.htmlspecialchars( $category_id ).'";
                         });
                     });
                 </script>';
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            window.location.href = "products.php";
+                            window.location.href = "categorie.php?cat='.htmlspecialchars( $category_id ).'";
                         });
                     });
                 </script>';
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             showConfirmButton: true,
                             
                         }).then(() => {
-                            window.location.href = "products.php";
+                            window.location.href = "categorie.php?cat='.htmlspecialchars( $category_id ).'";
                         });
                     });
                 </script>';
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$category_id = $_GET['cat'] ?? null;
+
 
 if ($category_id) {
     // Fetch category name
@@ -141,6 +141,21 @@ if ($category_id) {
             transform: scale(1.05);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
+        .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px; /* Set a fixed height for the image container */
+    padding: 10px;
+    overflow: hidden; /* Ensure any overflow content is hidden */
+}
+
+.image img {
+    width: auto; /* Let the width adjust automatically */
+    height: 100%; /* Set the height to fill the container */
+    object-fit: cover; /* Ensure the image covers the container, cropping if necessary */
+}
+
     </style>
 </head>
 <body>
@@ -152,20 +167,50 @@ if ($category_id) {
                     <?php if ($products): ?>
                         <?php foreach ($products as $product): ?>
                             <div class="card bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+                                <div class="image">
                                 <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" class="w-full h-48 object-cover" alt="<?= htmlspecialchars($product['nom_product']) ?>">
+                                </div>
                                 <div class="card-body p-4">
                                     <div class="card-header flex justify-between items-center mb-2">
                                         <span class="reviews text-yellow-500">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
+                                        <?php
+                                $id_product = $product['id_product'];
+                                $data = $pdo->prepare("
+                                    SELECT R.*, U.username, U.photo 
+                                    FROM review R 
+                                    INNER JOIN users U ON R.id_user = U.id_user 
+                                    WHERE R.id_product = :id_product
+                                ");
+                                $data->execute(['id_product' => $id_product]);
+                                $reviews = $data->fetchAll(PDO::FETCH_ASSOC);
+
+                                $avg = $pdo->prepare("SELECT AVG(R.rating) AS average_rating , COUNT(R.id_product) AS total_rating FROM review R WHERE R.id_product = :id_product");
+                                $avg->execute(['id_product' => $id_product]);
+                                $avg_rat = $avg->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                <span class="reviews text-yellow-500">
+                                    <?php
+                                    $avg_rating = round($avg_rat['average_rating'] * 2) / 2; // Round to nearest half
+                                    for ($i = 0; $i < floor($avg_rating); $i++) {
+                                        echo '<i class="fas fa-star"></i>';
+                                    }
+                                    if ($avg_rating - floor($avg_rating) > 0) {
+                                        echo '<i class="fas fa-star-half-alt"></i>';
+                                    }
+                                    for ($i = ceil($avg_rating); $i < 5; $i++) {
+                                        echo '<i class="far fa-star"></i>';
+                                    }
+                                    ?>
+                                            <a href="pro_review.php?id_product=<?= $id_product ?>" class="text-red-600">(<?= $avg_rat['total_rating'] ?> Reviews)</a>
                                         </span>
-                                        <span class="price text-lg font-bold text-gray-800">$<?= htmlspecialchars($product['price']) ?></span>
+                                        <span class="price text-lg font-bold text-gray-800 pl-32">$<?= htmlspecialchars($product['price']) ?></span>
                                     </div>
                                     <h5 class="card-title font-semibold text-lg text-gray-900"><?= htmlspecialchars($product['nom_product']) ?></h5>
-                                    <p class="card-text text-gray-600 mb-4"><?= htmlspecialchars($product['description']) ?></p>
+                                    <!-- <p class="card-text text-gray-600 mb-4"><?= htmlspecialchars($product['description']) ?></p> -->
                                     <form action="" method="post">
                                         <div class="card-footer flex justify-between items-center">
                                             <input type="hidden" name="id_product" value="<?= htmlspecialchars($product['id_product']) ?>">
-                                            <button name="like" class="text-red-500 hover:text-red-700 focus:outline-none"><i class="fa fa-heart"></i></button>
+                                            <button name="like" class="text-red-500 hover:text-red-700 focus:outline-none"><i class="fa fa-heart text-3xl"></i></button>
                                             <button name="add" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none">Add to Cart <i class="fa fa-shopping-cart"></i></button>
                                         </div>
                                     </form>

@@ -2,17 +2,29 @@
 include_once("../includes/database.php");
 include_once("../includes/navbar.php");
 
-// Fetch user profile information
-$user_id = $_SESSION['id_user'] ?? null;
+// Fetch product ID from URL
+$id_product = $_GET['id_product'] ?? null;
 $reviews = [];
 
-if ($user_id) {
-    // Fetch all user reviews
-    $reviewStmt = $pdo->prepare("SELECT r.rating, r.comment, r.created_at2, p.nom_product, p.photo FROM review r JOIN products p ON r.id_product = p.id_product WHERE r.id_user = ?");
-    $reviewStmt->execute([$user_id]);
+if ($id_product) {
+    // Fetch all reviews for the product
+    $reviewStmt = $pdo->prepare("
+        SELECT r.rating, r.comment, r.created_at2, p.nom_product, p.photo, u.username 
+        FROM review r 
+        JOIN products p ON r.id_product = p.id_product 
+        JOIN users u ON r.id_user = u.id_user 
+        WHERE r.id_product = ?
+    ");
+    $reviewStmt->execute([$id_product]);
     $reviews = $reviewStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch product information
+    $productStmt = $pdo->prepare("SELECT nom_product FROM products WHERE id_product = ?");
+    $productStmt->execute([$id_product]);
+    $product = $productStmt->fetch(PDO::FETCH_ASSOC);
 } else {
-    header("Location: login.php"); // Redirect to login if not logged in
+    // Redirect to a different page if no product ID is provided
+    header("Location: products.php");
     exit;
 }
 ?>
@@ -48,7 +60,9 @@ if ($user_id) {
 </head>
 <body class="home bg-gray-100">
     <div class="container mx-auto mt-10 p-5">
-        <h1 class="text-4xl font-bold text-white mb-6 text-center">All Reviews</h1>
+        <h1 class="text-4xl font-bold text-white mb-6 text-center">
+            All Reviews for <?= htmlspecialchars($product['nom_product'], ENT_QUOTES, 'UTF-8') ?>
+        </h1>
         <div class="p-6">
             <?php if (!empty($reviews)) { ?>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -72,7 +86,7 @@ if ($user_id) {
                     <?php } ?>
                 </div>
             <?php } else { ?>
-                <p class="text-gray-500">No reviews yet.</p>
+                <p class="text-gray-500 text-center">No reviews yet for <?= htmlspecialchars($product['nom_product'], ENT_QUOTES, 'UTF-8') ?>.</p>
             <?php } ?>
         </div>
     </div>

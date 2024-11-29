@@ -201,72 +201,61 @@ if ($user_id) {
         }
 
         .prof {
+            width: 40%;
             background-color: #ffffff;
-            background-image: radial-gradient(at 62% 65%, #06b6d4 40%, transparent 20%),
-                radial-gradient(at 22% 33%, #6d28d9 50%, transparent 50%);
+            background-image: radial-gradient(at 42% 65%, #89CFF0 40%, transparent 20%),
+                radial-gradient(at 22% 33%, #89CFF0 50%, transparent 50%);
             /* border-radius: 47% 53% 88% 12% / 49% 32% 68% 51%; */
-            border-radius: 50%;
+            border-radius: 100% 0% 100% 0% / 0% 100% 0% 100% ;
         }
 
-        .cart {
-            background-color: #ffffff;
-            background-image: radial-gradient(at 12% 33%, #06b6d4 40%, transparent 20%),
-                radial-gradient(at 62% 65%, #6d28d9 50%, transparent 50%);
-        }
+       
     </style>
 </head>
 
 <body class="home bg-gray-100">
     <div class="container mx-auto mt-10 p-5">
-        <h1 class="text-4xl font-bold text-white mb-6 text-center">User Profile</h1>
+        <h1 class="text-4xl font-bold text-white mb-6 text-center">My Account</h1>
         <div class="flex justify-center">
             <!-- User Profile Section -->
-            <div class="prof bg-gray-200 text-black shadow-md -mt-10 text-center py-20  w-2/5 h-1/5">
-                <div class="flex items-center justify-center space-x-6 mb-4" id="img_profil">
-                    <img src="pictures/<?= htmlspecialchars($userProfile['photo'], ENT_QUOTES, 'UTF-8') ?>"  class="rounded-full w-24 h-24 shadow-md border-4 border-gray-300 cursor-pointer hover:border-orange-300" alt="Profile">
-                    <div>
-                        <h3 class="text-4xl font-bold text-black"><?= htmlspecialchars($userProfile['username'], ENT_QUOTES, 'UTF-8') ?></h3>
-                        <p class="text-lg text-black"><?= $userProfile['is_admin'] ? 'Admin Profile' : 'User Profile' ?></p>
-                        <p class="text-lg text-black">Member since: <?= htmlspecialchars(date('d/m/Y', strtotime($userProfile['created_at'])), ENT_QUOTES, 'UTF-8') ?></p>
-                    </div>
+            <div class="prof max-w-2/3 mx-auto bg-white rounded-lg shadow-lg mt-16 h-1/6">
+        <div class="flex justify-between p-6 bg-gray-200 rounded-t-lg">
+            <div class="flex items-center space-x-6">
+                <img src="pictures/<?= htmlspecialchars($userProfile['photo'], ENT_QUOTES, 'UTF-8') ?>" class="rounded-full w-24 h-24 border-4 border-white" alt="Profile">
+                <div>
+                    <h3 class="text-3xl font-bold"><?= htmlspecialchars($userProfile['username'], ENT_QUOTES, 'UTF-8') ?></h3>
+                    <p class="text-lg"><?= $userProfile['is_admin'] ? 'Admin Profile' : 'User Profile' ?></p>
+                    <p class="text-sm text-gray-500">Member since: <?= htmlspecialchars(date('d/m/Y', strtotime($userProfile['created_at'])), ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
-                <div class="flex justify-center space-x-4 mb-4">
-                    <div class="flex items-center text-xl text-black">
-                        <i class="fas fa-envelope mr-2"></i>
-                        <span><?= htmlspecialchars($userProfile['email'], ENT_QUOTES, 'UTF-8') ?></span>
-                    </div>
-                </div>
-                <div class="flex justify-center space-x-4 mb-4">
-                    <div class="flex items-center text-xl text-black">
-                        <i class="fas fa-phone mr-2"></i>
-                        <span><?= htmlspecialchars($userProfile['tel'] ?? 'No phone number provided', ENT_QUOTES, 'UTF-8') ?></span>
-                    </div>
-                </div>
-
-                <div class="flex items-center flex-col gap-4">
-                    <!-- Edit Username Button -->
-                    <button onclick="toggleModal('usernameModal')" class="bg-orange-500 text-white px-4 py-2 w-4/12 rounded"><i class="fa-solid fa-user"></i> Edit Username </button>
-
-                    <!-- Edit Email Button -->
-                    <button onclick="toggleModal('emailModal')" class="bg-orange-500 text-white px-4 py-2 w-4/12 rounded"><i class="fa-solid fa-envelope"></i> Edit Email</button>
-
-                    <!-- Edit Phone Button -->
-                    <button onclick="toggleModal('phoneModal')" class="bg-orange-500 text-white px-4 py-2 w-4/12 rounded"><i class="fa-solid fa-phone"></i> Edit Phone</button>
-
-                    <!-- Edit Photo Button -->
-                    <button onclick="toggleModal('photoModal')" class="bg-orange-500 text-white px-4 py-2 w-4/12 rounded"><i class="fa-solid fa-image"></i> Edit Photo</button>
-
-                    <!-- Edit Password Button -->
-                    <button onclick="toggleModal('passwordModal')" class="bg-orange-500 text-white px-4 py-2 w-4/12 rounded"><i class="fa-solid fa-lock"></i> Change Password</button>
-
-                    <!-- Logout Button -->
-                    <a href="../includes/delete_acc.php" class="bg-red-500 hover:bg-red-700 text-gray-100 font-bold py-2 px-4 rounded inline-flex items-center w-4/12 justify-center">
-                        <span>Delete Account </span>
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
-                </div>
-
             </div>
+
+        </div>
+
+        <div class="p-6">
+            <div class="flex justify-between mb-4">
+                <div class="text-lg">
+                    <i class="fas fa-envelope mr-2"></i>
+                    <?= htmlspecialchars($userProfile['email'], ENT_QUOTES, 'UTF-8') ?>
+                </div>
+                <div class="text-lg">
+                    <i class="fas fa-phone mr-2"></i>
+                    <?= htmlspecialchars($userProfile['tel'] ?? 'No phone number provided', ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="toggleModal('usernameModal')" class="bg-green-600 text-white py-2 rounded"><i class="fa-solid fa-user"></i> Edit Username</button>
+                <button onclick="toggleModal('emailModal')" class="bg-green-600 text-white py-2 rounded"><i class="fa-solid fa-envelope"></i> Edit Email</button>
+                <button onclick="toggleModal('phoneModal')" class="bg-green-600 text-white py-2 rounded"><i class="fa-solid fa-phone"></i> Edit Phone</button>
+                <button onclick="toggleModal('photoModal')" class="bg-green-600 text-white py-2 rounded"><i class="fa-solid fa-image"></i> Edit Photo</button>
+                <button onclick="toggleModal('passwordModal')" class="bg-green-600 text-white py-2 rounded"><i class="fa-solid fa-lock"></i> Change Password</button>
+                <a href="../includes/delete_acc.php" class="bg-red-500 hover:bg-red-700 text-white py-2 rounded flex items-center justify-center">
+                    <span>Delete Account</span>
+                    <i class="fa-solid fa-trash ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 
             <!-- User Content Section -->
             <div class=" ml-auto w-1/2">

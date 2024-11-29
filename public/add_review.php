@@ -2,7 +2,6 @@
 include_once("../includes/navbar.php");
 include_once("../includes/database.php");
 
-session_start(); // Make sure the session is started
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
@@ -11,6 +10,8 @@ if (!isset($_SESSION['id_user'])) {
 
 $id_user = $_SESSION['id_user'];
 $id_produit = $_GET["id"];
+$alertMessage = "";
+$alertType = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['id_product'], $_POST['rating'], $_POST['comment'])) {
@@ -22,11 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $pdo->prepare("INSERT INTO review (id_product, id_user, rating, comment) VALUES (:id_product, :id_user, :rating, :comment)");
             $stmt->execute(['id_product' => $id_product, 'id_user' => $id_user, 'rating' => $rating, 'comment' => $comment]);
 
-            header("Location: selected_product.php?id=" . $id_product);
-            exit();
+            $alertMessage = "Review added successfully!";
+            $alertType = "success";
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $alertMessage = "Error: " . $e->getMessage();
+            $alertType = "error";
         }
+    } else {
+        $alertMessage = "Required fields are missing!";
+        $alertType = "error";
     }
 }
 ?>
@@ -38,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Review</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .star-rating input[type="radio"] {
             display: none;
@@ -58,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="home">
         <section class="container max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
             <h2 class="text-2xl font-bold mb-6 text-gray-800">Add Review</h2>
-            <form action="selected_product.php?id=<?=$id_produit?>" method="post" class="space-y-6">
+            <form action="" method="post" class="space-y-6">
                 <input type="hidden" name="id_product" value="<?=$id_produit?>">
                 <div class="form-group">
                     <label for="rating" class="block text-gray-700">Rate the product - <span class="text-red-500">*</span></label>
@@ -83,5 +89,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </section>
     </div>
+
+    <?php if ($alertMessage): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: '<?=$alertType?>',
+                title: '<?=($alertType == "success") ? "Success" : "Error"?>',
+                text: '<?=htmlspecialchars($alertMessage, ENT_QUOTES, 'UTF-8')?>',
+                showConfirmButton: <?=$alertType == 'success' ? 'false' : 'true'?>,
+                timer: <?=$alertType == 'success' ? '2000' : 'null'?>
+            }).then(() => {
+                <?php if ($alertType == 'success'): ?>
+                window.location.href = "selected_product.php?id=<?=$id_produit?>";
+                <?php endif; ?>
+            });
+        });
+    </script>
+    <?php endif; ?>
 </body>
 </html>

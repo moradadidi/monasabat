@@ -250,3 +250,8 @@ button.edit:hover {
         padding: 15px;
     }
 } */
+ .review{
+    background-color: #ffffff;
+    background-image: radial-gradient(at 12% 45%, #32CD32 40%, transparent 20%),
+        radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
+ }

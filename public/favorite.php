@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,11 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 radial-gradient(at 62% 33%, #ff7a00 50%, transparent 50%);
         } */
         .home nav {
-            height: 60px; 
+            height: 60px;
         }
 
         .home nav h1 {
-            font-size: 24px; 
+            font-size: 24px;
         }
 
         .home nav form {
@@ -105,14 +106,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             overflow: hidden;
         }
 
-        .home nav form select, 
-        .home nav form input, 
+        .home nav form select,
+        .home nav form input,
         .home nav form button {
-            height: 38px; /* Make form elements bigger */
-            margin: 0; /* Remove margin between elements */
-            border: none; /* Remove border from elements */
-            font-size: 16px; /* Increase font size */
-            outline: none; /* Remove outline on focus */
+            height: 38px;
+            /* Make form elements bigger */
+            margin: 0;
+            /* Remove margin between elements */
+            border: none;
+            /* Remove border from elements */
+            font-size: 16px;
+            /* Increase font size */
+            outline: none;
+            /* Remove outline on focus */
         }
 
         .home nav form select {
@@ -125,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .home nav form button {
-            background-color: #f97316; 
+            background-color: #f97316;
             padding-left: 1rem;
             padding-right: 1rem;
         }
@@ -138,23 +144,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             opacity: 1;
         }
 
-        .card {
+
+        .image {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            /* Set a fixed height for the image container */
+            padding: 10px;
+            overflow: hidden;
+            /* Ensure any overflow content is hidden */
         }
 
-        .product-image {
-            width: 100%;
-            height: 70%; /* Set a fixed height for the image container */
-            object-fit: contain; /* Ensure the whole image is shown */
-        }
-
-        .card-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .image img {
+            width: auto;
+            /* Let the width adjust automatically */
+            height: 100%;
+            /* Set the height to fill the container */
+            object-fit: cover;
+            /* Ensure the image covers the container, cropping if necessary */
         }
 
         .delete-btn {
@@ -166,6 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
+
 <body>
     <section class="home mt-14">
         <section class="mt-8 container mx-auto px-4">
@@ -173,11 +182,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h4 class="font-bold text-2xl text-gray-800">Your Favorite Products</h4>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative" id="favorites-div">
-                <?php if (count($favorites) > 0): ?>
-                    <?php foreach ($favorites as $product): ?>
+                <?php if (count($favorites) > 0) : ?>
+                    <?php foreach ($favorites as $product) : ?>
                         <div class="card bg-white shadow-lg rounded-lg overflow-hidden relative group hover:scale-105 duration-300">
-                            <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" class="product-image cursor-pointer" alt="<?= htmlspecialchars($product['nom_product']) ?>" data-product-id="<?= $product['id_product'] ?>">
-                            <div class="card-body p-4">
+                            <div class="image">
+                        <img src="../admin/<?= htmlspecialchars($product['photo']) ?>" class="product-image cursor-pointer" alt="<?= htmlspecialchars($product['nom_product']) ?>" data-product-id="<?= $product['id_product'] ?>">
+                        </div>
+                        <div class="card-body p-4">
                                 <div class="card-header flex justify-between items-center mb-2">
                                     <span class="reviews text-yellow-500">
                                         <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
@@ -185,16 +196,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <span class="price text-lg font-bold text-gray-800">$<?= htmlspecialchars($product['price']) ?></span>
                                 </div>
                                 <h5 class="card-title font-semibold text-lg text-gray-900"><?= htmlspecialchars($product['nom_product']) ?></h5>
-                                <p class="card-text text-gray-600 mb-4"><?= htmlspecialchars($product['description']) ?></p>
+                                <!-- <p class="card-text text-gray-600 mb-4"><?= htmlspecialchars($product['description']) ?></p> -->
                                 <form action="" method="post" class="absolute top-0 left-0 right-0 flex justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <input type="hidden" name="id_product" value="<?= htmlspecialchars($product['id_product']) ?>">
-                                    <button type="submit" name="del" class="delete-btn absolute top-2 right-2 text-3xl text-red-600 hover:text-red-600"><i class="fa fa-trash"></i></button>
-                                    <button name="add" class="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"><i class="fa-solid fa-cart-plus text-2xl"></i></button>
+                                    <button type="submit" name="del" class="delete-btn absolute top-2 right-2 text-3xl text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                                    <button name="add" class="text-orange-500  py-2 px-4 rounded-lg hover:text-orange-600"><i class="fa-solid fa-cart-plus text-4xl"></i></button>
                                 </form>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                <?php else: ?>
+                <?php else : ?>
                     <p class="text-center text-gray-600">You have no favorite products.</p>
                 <?php endif; ?>
             </div>
@@ -210,4 +221,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
+
 </html>
